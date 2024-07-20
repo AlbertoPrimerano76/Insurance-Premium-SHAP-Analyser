@@ -1,2 +1,2 @@
-# OPITThesis
+# OPIT Thesis
 OPIT Thesis
