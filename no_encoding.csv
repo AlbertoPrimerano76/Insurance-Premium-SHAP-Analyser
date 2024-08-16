@@ -1,0 +1,31 @@
+Sample Size,Best R2 Model,Best R2 Value,Best MSE Model,Best MSE Value,Best MAE Model,Best MAE Value
+100,K Neighbors Regressor,0.1922,Elastic Net,69287.4725,K Neighbors Regressor,202.03
+200,Elastic Net,0.3741,Elastic Net,76920.8713,Elastic Net,216.3604
+300,Elastic Net,0.4407,Elastic Net,65603.5671,K Neighbors Regressor,207.905
+400,K Neighbors Regressor,0.4523,K Neighbors Regressor,73750.7812,K Neighbors Regressor,208.1925
+100,Elastic Net,0.3096,Elastic Net,75028.4895,Elastic Net,224.5768
+100,Elastic Net,0.3593,Elastic Net,73942.5096,Elastic Net,212.3875
+100,Elastic Net,-0.3591,Elastic Net,69295.3593,Elastic Net,197.1253
+200,Elastic Net,0.4594,Elastic Net,78481.1885,Elastic Net,204.9223
+300,K Neighbors Regressor,0.5215,K Neighbors Regressor,75323.652,K Neighbors Regressor,217.5533
+400,Elastic Net,0.4913,Elastic Net,78882.5147,K Neighbors Regressor,216.6031
+100,Elastic Net,0.3258,Elastic Net,86004.6858,Elastic Net,232.0883
+1000,Elastic Net,0.4973,Elastic Net,67021.0456,K Neighbors Regressor,202.0572
+5000,Extreme Gradient Boosting,0.6875,Extreme Gradient Boosting,39760.5268,Extreme Gradient Boosting,148.1577
+10000,Extreme Gradient Boosting,0.8603,Extreme Gradient Boosting,19075.5766,Extreme Gradient Boosting,92.5129
+100,Elastic Net,0.3766,Elastic Net,84943.2459,Elastic Net,223.9632
+1000,Elastic Net,0.509,Elastic Net,64868.0169,K Neighbors Regressor,199.578
+5000,K Neighbors Regressor,0.6517,K Neighbors Regressor,48508.6371,K Neighbors Regressor,163.3299
+10000,Extreme Gradient Boosting,0.8845,Extreme Gradient Boosting,15559.4566,Extreme Gradient Boosting,82.679
+100,Elastic Net,0.3099,Elastic Net,91620.6826,Elastic Net,206.4687
+1000,Elastic Net,0.5108,Elastic Net,77120.2217,K Neighbors Regressor,206.5017
+5000,Extreme Gradient Boosting,0.6701,Extreme Gradient Boosting,44459.1184,Extreme Gradient Boosting,161.3669
+10000,Extreme Gradient Boosting,0.8643,Extreme Gradient Boosting,18402.7712,Extreme Gradient Boosting,88.1459
+100,Elastic Net,0.3584,Elastic Net,81123.4118,Elastic Net,236.0063
+1000,K Neighbors Regressor,0.5159,K Neighbors Regressor,60448.5148,K Neighbors Regressor,188.5177
+5000,Extreme Gradient Boosting,0.7023,Extreme Gradient Boosting,39105.8465,Extreme Gradient Boosting,144.785
+10000,Extreme Gradient Boosting,0.8804,Extreme Gradient Boosting,16409.4668,Extreme Gradient Boosting,82.2291
+100,Elastic Net,0.3718,Elastic Net,97673.6447,Elastic Net,228.9647
+1000,K Neighbors Regressor,0.5202,K Neighbors Regressor,67637.4879,K Neighbors Regressor,198.4055
+5000,K Neighbors Regressor,0.6297,K Neighbors Regressor,48386.0207,K Neighbors Regressor,164.3116
+10000,Extreme Gradient Boosting,0.8815,Extreme Gradient Boosting,16228.4631,Extreme Gradient Boosting,83.1296
