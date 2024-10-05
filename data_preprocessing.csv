@@ -1,5 +1,0 @@
-Sample Size,Best R2 Model,Best R2 Value,Best MSE Model,Best MSE Value,Best MAE Model,Best MAE Value
-100,Elastic Net,0.3557,Elastic Net,59434.3135,Elastic Net,199.5645
-1000,Elastic Net,0.5271,Elastic Net,60349.5276,Elastic Net,186.9182
-5000,Extreme Gradient Boosting,0.7114,Extreme Gradient Boosting,40079.2145,Extreme Gradient Boosting,151.0993
-10000,Extreme Gradient Boosting,0.873,Extreme Gradient Boosting,17552.987,Extreme Gradient Boosting,83.923
