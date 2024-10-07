@@ -11,6 +11,7 @@ from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor, E
 from sklearn.linear_model import ElasticNet, Ridge
 from sklearn.neural_network import MLPRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, explained_variance_score
+import traceback
 
 # Define the models
 models = {
@@ -54,7 +55,7 @@ experiments = [
 target_column = 'Premium'
 
 # Sample sizes and repetitions
-N = 25
+N = 50
 sample_sizes = [100, 500, 1000, 2000]
 experiments_to_run = ['Auto Premium', 'Cyber Security', 'Environment Liability']
 
@@ -79,9 +80,15 @@ with tqdm(total=total_iterations, desc="Total Progress", unit="iteration") as pb
         experiment_module_name = experiment['module']
         important_features = experiment['important_features']
 
-        # Dynamically import the module containing the `generate_test_data` method
-        experiment_module = importlib.import_module(experiment_module_name)
-        generate_test_data = getattr(experiment_module, 'generate_test_data')
+        try:
+            # Dynamically import the module containing the `generate_test_data` method
+            experiment_module = importlib.import_module(experiment_module_name)
+            generate_test_data = getattr(experiment_module, 'generate_test_data')
+        except Exception as e:
+            print(f"Error importing module {experiment_module_name}: {str(e)}")
+            print(traceback.format_exc())
+            pbar.update(len(sample_sizes) * len(models) * N)  # Skip this experiment in progress bar
+            continue  # Skip to the next experiment
 
         # Iterate over different sample sizes
         for sample_size in sample_sizes:
@@ -89,51 +96,62 @@ with tqdm(total=total_iterations, desc="Total Progress", unit="iteration") as pb
 
             # Repeat N times
             for repeat in range(N):
-                # Generate data (adjust size according to sample_size)
-                data = generate_test_data(sample_size)
+                try:
+                    # Generate data (adjust size according to sample_size)
+                    data = generate_test_data(sample_size)
 
-                # Pre-process the data
-                X_processed, y, mappings = pre_process_data(data, target_column=target_column)
-                feature_names = X_processed.columns  # Get feature names
-                # Split data into training and testing sets
-                X_train, X_test, y_train, y_test = train_test_split(X_processed, y, test_size=0.2, random_state=42)
+                    # Pre-process the data
+                    X_processed, y, mappings = pre_process_data(data, target_column=target_column)
+                    feature_names = X_processed.columns  # Get feature names
+                    # Split data into training and testing sets
+                    X_train, X_test, y_train, y_test = train_test_split(X_processed, y, test_size=0.2, random_state=42)
+                except Exception as e:
+                    print(f"Error processing data for {experiment_name} with sample size {sample_size}: {str(e)}")
+                    print(traceback.format_exc())
+                    pbar.update(len(models))  # Skip this sample size for all models
+                    continue  # Skip to the next sample size
 
                 # Train each model and track the progress with tqdm
                 print(f"Training models for {experiment_name} with sample size {sample_size}...")
 
                 for model_name, model in models.items():
-                    # Fit the model
-                    model.fit(X_train, y_train)
+                    try:
+                        # Fit the model
+                        model.fit(X_train, y_train)
 
-                    # Run SHAP analysis based on model type
-                    if model_name in tree_based_models:
-                        # Use TreeExplainer for tree-based models
-                        explainer = shap.TreeExplainer(model)
-                        shap_values = explainer.shap_values(X_test)
-                    else:
-                        # Use KernelExplainer for other models like ElasticNet, MLPRegressor
-                        explainer = shap.KernelExplainer(model.predict, X_train[:100])  # KernelExplainer can be slow, so sample training data
-                        shap_values = explainer.shap_values(X_test)
+                        # Run SHAP analysis based on model type
+                        if model_name in tree_based_models:
+                            # Use TreeExplainer for tree-based models
+                            explainer = shap.TreeExplainer(model)
+                            shap_values = explainer.shap_values(X_test)
+                        else:
+                            # Use KernelExplainer for other models like ElasticNet, MLPRegressor
+                            explainer = shap.KernelExplainer(model.predict, X_train[:10])  # KernelExplainer can be slow, so sample training data
+                            shap_values = explainer.shap_values(X_test)
 
-                    # Calculate SHAP feature importance
-                    shap_feature_importance = dict(zip(X_processed.columns, np.mean(np.abs(shap_values), axis=0)))
-                    sorted_features = sorted(shap_feature_importance.items(), key=lambda item: item[1], reverse=True)
-                    sorted_feature_names = [feature for feature, importance in sorted_features]
-                    top_features = set(sorted_feature_names[:len(important_features)])
-                    match_percentage = len(important_features.intersection(top_features)) / len(important_features) * 100
-                    top_features_string = ", ".join([f"{feature}: {importance:.4f}" for feature, importance in sorted_features[:len(important_features)]])
+                        # Calculate SHAP feature importance
+                        shap_feature_importance = dict(zip(X_processed.columns, np.mean(np.abs(shap_values), axis=0)))
+                        sorted_features = sorted(shap_feature_importance.items(), key=lambda item: item[1], reverse=True)
+                        sorted_feature_names = [feature for feature, importance in sorted_features]
+                        top_features = set(sorted_feature_names[:len(important_features)])
+                        match_percentage = len(important_features.intersection(top_features)) / len(important_features) * 100
+                        top_features_string = ", ".join([f"{feature}: {importance:.4f}" for feature, importance in sorted_features[:len(important_features)]])
 
-                    # Append the result to the list
-                    results.append({
-                        'Experiment': experiment_name,
-                        'Model': model_name,
-                        'Sample Size': sample_size,
-                        'SHAP Match %': match_percentage,
-                        'Top Features': top_features_string
-                    })
+                        # Append the result to the list
+                        results.append({
+                            'Experiment': experiment_name,
+                            'Model': model_name,
+                            'Sample Size': sample_size,
+                            'SHAP Match %': match_percentage,
+                            'Top Features': top_features_string
+                        })
 
-                    # Print the percentage of correctly identified features
-                    print(f"{model_name} - Correct Features Identified: {match_percentage:.2f}%")
+                        # Print the percentage of correctly identified features
+                        print(f"{model_name} - Correct Features Identified: {match_percentage:.2f}%")
+
+                    except Exception as e:
+                        print(f"Error training model {model_name} for {experiment_name} with sample size {sample_size}: {str(e)}")
+                        print(traceback.format_exc())
 
                     pbar.update(1)
 
@@ -145,5 +163,9 @@ with tqdm(total=total_iterations, desc="Total Progress", unit="iteration") as pb
 df_results = pd.DataFrame(results)
 
 # Save the results to a CSV file using the input file name
-df_results.to_csv(output_file_name, index=False)
-print(f"Results saved to {output_file_name}.")
+try:
+    df_results.to_csv(output_file_name, index=False)
+    print(f"Results saved to {output_file_name}.")
+except Exception as e:
+    print(f"Error saving results to CSV: {str(e)}")
+    print(traceback.format_exc())
