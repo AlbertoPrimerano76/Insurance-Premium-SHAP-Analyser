@@ -23,3 +23,15 @@ Experiment 2 - SHAP Precision ML/__pycache__/utilities.cpython-311.pyc
 Experiment 2 - SHAP Precision ML/__pycache__/utilities.cpython-312.pyc
 Experiment 2 - SHAP Precision ML/saved_models/stacking_model.pkl
 Experiment 2 - SHAP Precision ML/saved_models/stacking_model.joblib
+Experiment 1/__pycache__/auto_insurance_premium.cpython-311.pyc
+Experiment 1/__pycache__/auto_insurance_premium.cpython-312.pyc
+Experiment 1/__pycache__/cybersecurity_insurance_premium.cpython-311.pyc
+Experiment 1/__pycache__/cybersecurity_insurance_premium.cpython-312.pyc
+Experiment 1/__pycache__/env_liability_insurance_premium.cpython-311.pyc
+Experiment 1/__pycache__/env_liability_insurance_premium.cpython-312.pyc
+Experiment 1/__pycache__/utilities.cpython-311.pyc
+Experiment 1/__pycache__/utilities.cpython-312.pyc
+Experiment 1/catboost_info/catboost_training.json
+Experiment 1/catboost_info/learn/events.out.tfevents
+Experiment 1/catboost_info/learn_error.tsv
+Experiment 1/catboost_info/time_left.tsv
